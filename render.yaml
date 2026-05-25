@@ -1,19 +1,14 @@
-# Full stack: backend (Flask) + frontend (React) — one URL for phone/browser
-# Repo: https://github.com/bhautik0012/Government-potal
+# https://github.com/bhautik0012/Government-potal
 services:
   - type: web
     name: government-potal
     runtime: python
     plan: free
     rootDir: Government
-    buildCommand: >-
-      pip install -r backend/requirements.txt &&
-      cd frontend &&
-      npm ci &&
-      npm run build &&
-      mkdir -p backend/static &&
-      cp -r build/* backend/static/
+    buildCommand: bash build.sh
     startCommand: bash start.sh
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
+      - key: CI
+        value: "false"

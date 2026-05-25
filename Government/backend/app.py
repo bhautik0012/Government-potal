@@ -6,14 +6,28 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-STATIC_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static")
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
+
+def _resolve_static_folder():
+    """Use backend/static after build; fallback to frontend/build on Render/local."""
+    candidates = [
+        os.path.join(BASE_DIR, "static"),
+        os.path.join(BASE_DIR, "..", "frontend", "build"),
+    ]
+    for folder in candidates:
+        index = os.path.join(folder, "index.html")
+        if os.path.isfile(index):
+            return os.path.abspath(folder)
+    return os.path.join(BASE_DIR, "static")
+
+
+STATIC_FOLDER = _resolve_static_folder()
 
 # --- CONFIGURATION ---
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gov_portal_2026.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads', 'documents')
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -225,7 +239,12 @@ def serve_frontend(path):
     index = os.path.join(STATIC_FOLDER, "index.html")
     if os.path.exists(index):
         return send_from_directory(STATIC_FOLDER, "index.html")
-    return jsonify({"status": "Online", "message": "GovPortal API — build frontend for UI"}), 200
+    return jsonify({
+        "status": "Online",
+        "message": "Frontend not built. Run build.sh or check Render build logs.",
+        "static_folder": STATIC_FOLDER,
+        "index_exists": os.path.isfile(index),
+    }), 200
 
 
 if __name__ == "__main__":

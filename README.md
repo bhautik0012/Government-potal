@@ -18,7 +18,7 @@ Use a **Web Service** (Python), not Static Site — backend + frontend deploy to
 | **Service type** | Web Service |
 | **Root Directory** | `Government` |
 | **Runtime** | Python 3 |
-| **Build Command** | `pip install -r backend/requirements.txt && cd frontend && npm ci && npm run build && mkdir -p backend/static && cp -r build/* backend/static/` |
+| **Build Command** | `bash build.sh` |
 | **Start Command** | `bash start.sh` |
 
 > Do **not** put `Government` in Start Command or Build Command — that is only for **Root Directory**.
