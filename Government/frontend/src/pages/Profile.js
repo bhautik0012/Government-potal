@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import QRCode from "react-qr-code";
 import { toJpeg } from 'html-to-image';
 import SignatureCanvas from 'react-signature-canvas';
@@ -23,7 +23,6 @@ function Profile() {
 
   const [vaultDocs, setVaultDocs] = useState([]);
   const userEmail = localStorage.getItem("userEmail") || "N/A";
-  const API_BASE = "http://localhost:5000"; 
 
   useEffect(() => {
     fetchVault();
@@ -34,7 +33,7 @@ function Profile() {
 
   const fetchVault = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/api/user/my-vault/${userEmail}`);
+      const res = await api.get(`${API_BASE}/api/user/my-vault/${userEmail}`);
       setVaultDocs(res.data);
     } catch (err) {
       console.error("Vault Fetch Error:", err);
@@ -45,7 +44,7 @@ function Profile() {
   const handleProfileUpdate = async () => {
     try {
       // Body must include the email so Flask knows WHICH user to update
-      const response = await axios.put(`${API_BASE}/api/user/update-profile`, {
+      const response = await api.put(`${API_BASE}/api/user/update-profile`, {
         email: userEmail, 
         name: editName,
         mobile: editMobile 
@@ -78,7 +77,7 @@ function Profile() {
 
     setIsUploading(true);
     try {
-      await axios.post(`${API_BASE}/api/user/upload-document`, formData);
+      await api.post(`${API_BASE}/api/user/upload-document`, formData);
       alert("✅ Document secured!");
       fetchVault();
     } catch (err) { alert("❌ Upload failed."); } 
@@ -94,7 +93,7 @@ function Profile() {
         logger: m => { if (m.status === 'recognizing text') setScanProgress(Math.floor(m.progress * 100)); }
       });
       if (text.toLowerCase().includes(editName.toLowerCase())) {
-        await axios.put(`${API_BASE}/api/user/verify-document/${doc.id}`);
+        await api.put(`${API_BASE}/api/user/verify-document/${doc.id}`);
         alert("✨ AI Verified!");
         fetchVault();
       } else { alert("❌ No name match found."); }

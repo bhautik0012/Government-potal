@@ -25,6 +25,8 @@ uploads/
 # Build output
 build/
 dist/
+Government/backend/static/*
+!Government/backend/static/.gitkeep
 *.egg-info/
 
 # OS & IDE

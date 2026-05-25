@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function Help() {
   const [faqs, setFaqs] = useState([]);
@@ -8,7 +8,7 @@ function Help() {
 
   useEffect(() => {
     // Fetch FAQs from your Flask Backend
-    axios.get("http://127.0.0.1:5000/api/faqs")
+    api.get("/api/faqs")
       .then(res => setFaqs(res.data))
       .catch(() => {
         // Fallback demo data if backend is offline

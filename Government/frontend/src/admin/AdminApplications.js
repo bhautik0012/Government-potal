@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function AdminApplications() {
   const [applications, setApplications] = useState([]);
@@ -11,7 +11,7 @@ function AdminApplications() {
 
   const fetchApplications = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:5000/api/admin/all-applications");
+      const res = await api.get("/api/admin/all-applications");
       setApplications(res.data);
     } catch (err) {
       console.error("Error fetching applications");
@@ -35,7 +35,7 @@ function AdminApplications() {
     }
 
     try {
-      await axios.put("http://127.0.0.1:5000/api/admin/update-status", { 
+      await api.put("/api/admin/update-status", { 
         id, 
         status: newStatus,
         remarks: reason // Send the reason to the backend

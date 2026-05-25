@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { Link } from "react-router-dom";
 
 function Schemes() {
@@ -28,7 +28,7 @@ function Schemes() {
   useEffect(() => {
     const fetchSchemes = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:5000/api/schemes");
+        const res = await api.get("/api/schemes");
         setSchemes(res.data);
       } catch (err) {
         console.error("Backend offline. Using local backup.");

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
@@ -13,7 +13,7 @@ function Login() {
     setError(""); // Clear previous errors
     
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/login", {
+      const response = await api.post("/api/login", {
         email,
         password
       });

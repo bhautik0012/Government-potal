@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function ApplyScheme() {
@@ -30,7 +30,7 @@ function ApplyScheme() {
   useEffect(() => {
     const fetchSchemes = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/schemes");
+        const response = await api.get("/api/schemes");
         setSchemes(response.data);
       } catch (err) {
         console.error("Error fetching schemes:", err);
@@ -101,7 +101,7 @@ function ApplyScheme() {
       formData.append("income_proof", appFiles.incomeFile);
 
       // FIX 2: Explicitly catch the request to check for server availability
-      const response = await axios.post("http://127.0.0.1:5000/api/apply", formData, {
+      const response = await api.post("/api/apply", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         timeout: 10000 // 10 second timeout
       });

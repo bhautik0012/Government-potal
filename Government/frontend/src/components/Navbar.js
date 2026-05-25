@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 // --- 1. TRANSLATION DATA ---
 const translations = {
@@ -45,7 +45,7 @@ function Navbar() {
   const userName = localStorage.getItem("userName");
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000/api/announcements")
+    api.get("/api/announcements")
       .then(res => {
         if (res.data.length > 0) setNews(res.data[res.data.length - 1].content);
       })
@@ -54,7 +54,7 @@ function Navbar() {
     const fetchNotifications = async () => {
       if (userEmail && userRole === "citizen") {
         try {
-          const res = await axios.get(`http://127.0.0.1:5000/api/user/my-applications/${userEmail}`);
+          const res = await api.get(`/api/user/my-applications/${userEmail}`);
           const processed = res.data.filter(a => a.status !== "Pending");
           setNotifications(processed.reverse());
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
@@ -24,7 +24,7 @@ function AdminLogin() {
     setError("");
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/login", {
+      const response = await api.post("/api/login", {
         email: formData.email,
         password: formData.password
       });

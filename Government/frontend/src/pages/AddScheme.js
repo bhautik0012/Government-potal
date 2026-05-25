@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import { api } from "../config/api";
 
 function AddScheme(){
 
@@ -16,17 +17,10 @@ setForm({...form,[e.target.name]:e.target.value})
 function submit(e){
 e.preventDefault()
 
-fetch("http://127.0.0.1:5000/add-scheme",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify(form)
-})
-.then(res=>res.json())
-.then(data=>{
-alert("Scheme Added")
-})
+api
+  .post("/api/admin/add-scheme", form)
+  .then(() => alert("Scheme Added"))
+  .catch(() => alert("Failed to add scheme"))
 }
 
 return(

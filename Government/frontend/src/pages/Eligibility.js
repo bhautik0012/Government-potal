@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate } from "react-router-dom";
 
 function Eligibility() {
@@ -16,7 +16,7 @@ function Eligibility() {
 
   // --- 1. FETCH LIVE SCHEMES FROM DATABASE ---
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000/api/schemes")
+    api.get("/api/schemes")
       .then(res => setSchemes(res.data))
       .catch(err => console.error("Could not fetch schemes for checker"));
   }, []);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate } from "react-router-dom"; // Add this for navigation
 
 function Chatbox() {
@@ -47,7 +47,7 @@ function Chatbox() {
 
       if (detectedCategory) {
         // FETCH LIVE DATA FROM FLASK
-        const res = await axios.get("http://127.0.0.1:5000/api/schemes");
+        const res = await api.get("/api/schemes");
         const matches = res.data.filter(s => 
           s.category.toLowerCase().includes(detectedCategory) || 
           s.description.toLowerCase().includes(detectedCategory)

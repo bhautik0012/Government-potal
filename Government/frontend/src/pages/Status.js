@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function Status() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,7 +14,7 @@ function Status() {
     
     try {
       // Connecting to your Flask Backend
-      const response = await axios.get(`http://127.0.0.1:5000/api/status/${searchQuery}`);
+      const response = await api.get(`/api/status/${searchQuery}`);
       setApplications(response.data);
     } catch (error) {
       console.error("Error fetching status:", error);

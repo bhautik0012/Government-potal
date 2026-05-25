@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function SchemeDetails() {
   const { id } = useParams();
@@ -12,7 +12,7 @@ function SchemeDetails() {
   useEffect(() => {
     setLoading(true);
     // Use localhost instead of 127.0.0.1 if you face CORS issues
-    axios.get(`http://localhost:5000/api/schemes/${id}`)
+    api.get(`/api/schemes/${id}`)
       .then(res => {
         setScheme(res.data);
         setLoading(false);

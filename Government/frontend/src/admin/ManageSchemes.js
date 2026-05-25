@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function ManageSchemes() {
   const [schemes, setSchemes] = useState([]);
@@ -21,7 +21,7 @@ function ManageSchemes() {
 
   const fetchSchemes = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:5000/api/schemes");
+      const res = await api.get("/api/schemes");
       setSchemes(res.data);
     } catch (err) {
       console.error("Error fetching schemes");
@@ -57,11 +57,11 @@ function ManageSchemes() {
     try {
       if (isEditing) {
         // UPDATE EXISTING
-        await axios.put(`http://127.0.0.1:5000/api/admin/update-scheme/${currentSchemeId}`, formData);
+        await api.put(`/api/admin/update-scheme/${currentSchemeId}`, formData);
         alert("✅ Scheme Updated Successfully!");
       } else {
         // ADD NEW
-        const res = await axios.post("http://127.0.0.1:5000/api/admin/add-scheme", formData);
+        const res = await api.post("/api/admin/add-scheme", formData);
         if (res.status === 201) {
             alert("🚀 New Scheme Published Successfully!");
         }
@@ -82,7 +82,7 @@ function ManageSchemes() {
   const handleDelete = async (id) => {
     if (window.confirm("🗑️ Are you sure you want to delete this scheme? This action cannot be undone.")) {
       try {
-        await axios.delete(`http://127.0.0.1:5000/api/admin/delete-scheme/${id}`);
+        await api.delete(`/api/admin/delete-scheme/${id}`);
         fetchSchemes();
       } catch (err) {
         alert("Error deleting scheme");
@@ -95,7 +95,7 @@ function ManageSchemes() {
     const adContent = prompt("Enter the new announcement/advertisement text:");
     if (adContent) {
       try {
-        await axios.post("http://127.0.0.1:5000/api/admin/add-announcement", { content: adContent });
+        await api.post("/api/admin/add-announcement", { content: adContent });
         alert("📢 Ticker Updated!");
         window.location.reload(); 
       } catch (err) { alert("Error updating ticker"); }
@@ -105,7 +105,7 @@ function ManageSchemes() {
   const handleClearAd = async () => {
     if (window.confirm("Remove current announcement?")) {
       try {
-        await axios.delete("http://127.0.0.1:5000/api/admin/clear-announcements");
+        await api.delete("/api/admin/clear-announcements");
         window.location.reload(); 
       } catch (err) { alert("Error clearing ticker"); }
     }

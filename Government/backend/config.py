@@ -1,2 +1,4 @@
-MONGO_URI = "mongodb+srv://meet1705:Meet94411@cluster0.uejahlb.mongodb.net/?appName=Cluster0"
-DB_NAME = "govguide"
+import os
+
+MONGO_URI = os.environ.get("MONGO_URI", "")
+DB_NAME = os.environ.get("DB_NAME", "govguide")

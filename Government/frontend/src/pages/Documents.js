@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function Documents() {
   const [docs, setDocs] = useState([]);
@@ -7,7 +7,7 @@ function Documents() {
 
   useEffect(() => {
     // Connects to your Flask API
-    axios.get("http://127.0.0.1:5000/api/document-requirements")
+    api.get("/api/document-requirements")
       .then(res => setDocs(res.data))
       .catch(() => {
         // Fallback demo data if backend is not running

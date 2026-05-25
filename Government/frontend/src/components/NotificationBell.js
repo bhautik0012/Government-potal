@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
@@ -10,7 +10,7 @@ function NotificationBell() {
   useEffect(() => {
     const checkNotifications = async () => {
       try {
-        const res = await axios.get(`http://127.0.0.1:5000/api/user/my-applications/${userEmail}`);
+        const res = await api.get(`/api/user/my-applications/${userEmail}`);
         const updates = res.data.filter(app => app.status !== "Pending");
         
         // Check if we have more processed apps than last time

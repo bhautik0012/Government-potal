@@ -6,8 +6,8 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-# Relaxed CORS for development to allow all React interactions
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+STATIC_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static")
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # --- CONFIGURATION ---
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gov_portal_2026.db'
@@ -70,10 +70,6 @@ class DocumentVault(db.Model):
 @app.route('/uploads/documents/<filename>')
 def serve_document(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
-@app.route("/")
-def home():
-    return jsonify({"status": "Online", "message": "GovPortal AI API Running"}), 200
 
 # --- AUTH ---
 @app.route("/api/register", methods=["POST"])
@@ -220,5 +216,19 @@ with app.app_context():
         db.create_all()
         print("✅ Database successfully modernized.")
 
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_frontend(path):
+    """Serve React build (phone/browser). API routes registered above take priority."""
+    if path and os.path.exists(os.path.join(STATIC_FOLDER, path)):
+        return send_from_directory(STATIC_FOLDER, path)
+    index = os.path.join(STATIC_FOLDER, "index.html")
+    if os.path.exists(index):
+        return send_from_directory(STATIC_FOLDER, "index.html")
+    return jsonify({"status": "Online", "message": "GovPortal API — build frontend for UI"}), 200
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "1") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug)

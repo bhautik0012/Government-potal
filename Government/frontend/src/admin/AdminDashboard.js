@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate } from "react-router-dom";
 import ManageSchemes from "./ManageSchemes"; 
 
@@ -26,8 +26,8 @@ function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const appsRes = await axios.get("http://127.0.0.1:5000/api/admin/all-applications");
-      const inqRes = await axios.get("http://127.0.0.1:5000/api/admin/inquiries");
+      const appsRes = await api.get("/api/admin/all-applications");
+      const inqRes = await api.get("/api/admin/inquiries");
       
       setApps(appsRes.data);
       setInquiries(inqRes.data);
@@ -50,7 +50,7 @@ function AdminDashboard() {
     }
 
     try {
-      await axios.put("http://127.0.0.1:5000/api/admin/update-status", { 
+      await api.put("/api/admin/update-status", { 
         id, 
         status: newStatus,
         remarks: remark 
@@ -67,7 +67,7 @@ function AdminDashboard() {
       alert("No document uploaded for this application.");
       return;
     }
-    window.open(`http://127.0.0.1:5000/uploads/documents/${filename}`, "_blank");
+    window.open(uploadsUrl(filename), "_blank");
   };
 
   const styles = {
@@ -190,7 +190,7 @@ function AdminDashboard() {
                           {!inq.is_resolved ? (
                             <div style={{ display: "flex", gap: "10px" }}>
                                 <button onClick={() => window.location.href=`mailto:${inq.email}`} style={{background: "#38bdf8", color: "#0f172a", border: "none", padding: "8px 15px", borderRadius: "6px", fontWeight: "bold", cursor: "pointer"}}>Reply</button>
-                                <button onClick={() => axios.put(`http://127.0.0.1:5000/api/admin/resolve-inquiry/${inq.id}`).then(fetchData)} style={{background: "#4ade80", color: "#0f172a", border: "none", padding: "8px 15px", borderRadius: "6px", fontWeight: "bold", cursor: "pointer"}}>Resolve</button>
+                                <button onClick={() => api.put(`/api/admin/resolve-inquiry/${inq.id}`).then(fetchData)} style={{background: "#4ade80", color: "#0f172a", border: "none", padding: "8px 15px", borderRadius: "6px", fontWeight: "bold", cursor: "pointer"}}>Resolve</button>
                             </div>
                           ) : <span style={{color: "#4ade80"}}>Resolved</span>}
                         </td>

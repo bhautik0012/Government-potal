@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
@@ -26,7 +26,7 @@ function Register() {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/register", {
+      const response = await api.post("/api/register", {
         name: formData.name,
         email: formData.email,
         password: formData.password

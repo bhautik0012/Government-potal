@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { Link } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import QRCode from "qrcode";
@@ -64,7 +64,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const res = await axios.get(`http://127.0.0.1:5000/api/user/my-applications/${userEmail}`);
+        const res = await api.get(`/api/user/my-applications/${userEmail}`);
         const allApps = res.data;
 
         setStats({

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 import { useNavigate } from "react-router-dom";
 
 function EligibilityChecker() {
@@ -9,7 +9,7 @@ function EligibilityChecker() {
 
   const handleCheck = async () => {
     try {
-      const res = await axios.post("http://127.0.0.1:5000/api/user/check-eligibility", criteria);
+      const res = await api.post("/api/user/check-eligibility", criteria);
       setResults(res.data);
     } catch (err) {
       alert("Error checking eligibility");

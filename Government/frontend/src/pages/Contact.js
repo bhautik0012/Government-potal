@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { api, API_BASE, uploadsUrl } from "../config/api";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ function Contact() {
     e.preventDefault();
     setStatus("Sending...");
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/contact", formData);
+      const response = await api.post("/api/contact", formData);
       if (response.status === 201) {
         setStatus("Message Sent Successfully! We will contact you soon.");
         setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
