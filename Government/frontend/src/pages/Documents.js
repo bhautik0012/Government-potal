@@ -41,7 +41,9 @@ function Documents() {
       border: "1px solid #cbd5e1",
       marginBottom: "40px",
       outline: "none",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
+      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+      background: "#ffffff",
+      color: "#0f172a",
     },
     grid: {
       display: "grid",

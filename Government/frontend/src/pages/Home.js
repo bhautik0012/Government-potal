@@ -12,7 +12,12 @@ function Home() {
           Transparent, agent-free, and multilingual support for every citizen.
         </p>
         <div className="hero-search">
-          <input type="text" placeholder="Search documents or schemes..." aria-label="Search" />
+          <input
+            type="text"
+            className="hero-search-input"
+            placeholder="Search documents or schemes..."
+            aria-label="Search"
+          />
           <button type="button" className="btn" style={{ background: "#facc15", color: "#1e3a8a", borderRadius: "50px" }}>
             <i className="fa fa-search" /> Search
           </button>

@@ -132,6 +132,21 @@ iframe {
 
 .input,
 .select-field,
+textarea.field,
+.search-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+textarea,
+select {
+  color: #0f172a;
+  -webkit-text-fill-color: #0f172a;
+}
+
+.input,
+.select-field,
 textarea.field {
   width: 100%;
   padding: 0.85rem 1rem;
@@ -140,7 +155,15 @@ textarea.field {
   font-size: 1rem;
   font-family: inherit;
   outline: none;
+  background: #ffffff;
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input::placeholder,
+.search-input::placeholder,
+textarea::placeholder {
+  color: #64748b;
+  opacity: 1;
 }
 
 .input:focus,
@@ -378,6 +401,11 @@ textarea.field:focus {
   clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
 }
 
+.hero .hero-title,
+.hero .hero-sub {
+  color: #fff;
+}
+
 @keyframes gradientBG {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -422,6 +450,14 @@ textarea.field:focus {
   border-radius: 50px;
   font-size: 1rem;
   outline: none;
+  background: #ffffff;
+  color: #0f172a;
+  -webkit-text-fill-color: #0f172a;
+}
+
+.hero-search input::placeholder {
+  color: #64748b;
+  opacity: 1;
 }
 
 .stats-row {
@@ -534,6 +570,8 @@ textarea.field:focus {
   border: 1px solid #cbd5e1;
   outline: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  color: #0f172a;
 }
 
 /* ----- Chatbox ----- */
