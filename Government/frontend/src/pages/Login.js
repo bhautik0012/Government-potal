@@ -39,59 +39,9 @@ function Login() {
     }
   };
 
-  const styles = {
-    page: {
-      background: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)",
-      height: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      fontFamily: "'Poppins', sans-serif",
-    },
-    glassCard: {
-      background: "rgba(255, 255, 255, 0.95)",
-      backdropFilter: "blur(10px)",
-      padding: "50px",
-      borderRadius: "30px",
-      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-      width: "100%",
-      maxWidth: "400px",
-      textAlign: "center",
-    },
-    input: {
-      width: "100%",
-      padding: "15px",
-      margin: "10px 0",
-      borderRadius: "12px",
-      border: "1px solid #cbd5e1",
-      outline: "none",
-      fontSize: "16px",
-      boxSizing: "border-box",
-    },
-    button: {
-      width: "100%",
-      padding: "15px",
-      background: "#2563eb",
-      color: "white",
-      border: "none",
-      borderRadius: "12px",
-      fontWeight: "bold",
-      fontSize: "16px",
-      cursor: "pointer",
-      marginTop: "20px",
-      transition: "0.3s",
-    },
-    link: {
-      color: "#2563eb",
-      textDecoration: "none",
-      fontWeight: "600",
-      fontSize: "14px",
-    },
-  };
-
   return (
-    <div style={styles.page}>
-      <div style={styles.glassCard}>
+    <div className="page-center" style={{ background: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)", fontFamily: "'Poppins', sans-serif" }}>
+      <div className="auth-card" style={{ textAlign: "center" }}>
         <div style={{ fontSize: "40px", color: "#2563eb", marginBottom: "10px" }}>
           <i className="fa fa-user-circle"></i>
         </div>
@@ -111,7 +61,7 @@ function Login() {
           <div style={{ textAlign: "left" }}>
             <label style={{ fontSize: "13px", fontWeight: "600", marginLeft: "5px" }}>Email Address</label>
             <input
-              style={styles.input}
+              className="input"
               type="email"
               placeholder="name@example.com"
               onChange={(e) => setEmail(e.target.value)}
@@ -122,7 +72,7 @@ function Login() {
           <div style={{ textAlign: "left", marginTop: "10px" }}>
             <label style={{ fontSize: "13px", fontWeight: "600", marginLeft: "5px" }}>Password</label>
             <input
-              style={styles.input}
+              className="input"
               type="password"
               placeholder="••••••••"
               onChange={(e) => setPassword(e.target.value)}
@@ -130,18 +80,13 @@ function Login() {
             />
           </div>
 
-          <button
-            type="submit"
-            style={styles.button}
-            onMouseOver={(e) => (e.target.style.background = "#1d4ed8")}
-            onMouseOut={(e) => (e.target.style.background = "#2563eb")}
-          >
+          <button type="submit" className="btn btn-primary btn-block" style={{ marginTop: "1.25rem" }}>
             Sign In
           </button>
         </form>
 
         <div style={{ marginTop: "25px", fontSize: "14px", color: "#64748b" }}>
-          Don't have an account? <Link to="/register" style={styles.link}>Create One</Link>
+          Don't have an account? <Link to="/register" style={{ color: "#2563eb", fontWeight: 600 }}>Create One</Link>
         </div>
       </div>
     </div>

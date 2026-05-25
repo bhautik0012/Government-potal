@@ -71,9 +71,6 @@ function AdminDashboard() {
   };
 
   const styles = {
-    adminPage: { display: "flex", minHeight: "100vh", background: "#0f172a", fontFamily: "'Poppins', sans-serif", color: "white" },
-    sidebar: { width: "280px", background: "#1e293b", padding: "40px 20px", borderRight: "1px solid #334155", position: "sticky", top: 0, height: "100vh" },
-    content: { flex: 1, padding: "40px", background: "#0f172a" },
     navBtn: (active) => ({
       width: "100%", padding: "14px", marginBottom: "12px", borderRadius: "10px", 
       border: active ? "none" : "1px solid #334155",
@@ -98,29 +95,30 @@ function AdminDashboard() {
   }
 
   return (
-    <div style={styles.adminPage}>
-      <div style={styles.sidebar}>
-        <h2 style={{color: "#38bdf8", marginBottom: "40px"}}>OFFICER PANEL</h2>
-        <button onClick={() => setActiveTab("applications")} style={styles.navBtn(activeTab === "applications")}>📂 Applications</button>
-        <button onClick={() => setActiveTab("schemes")} style={styles.navBtn(activeTab === "schemes")}>📜 Manage Schemes</button>
-        <button onClick={() => setActiveTab("inquiries")} style={styles.navBtn(activeTab === "inquiries")}>💬 User Inquiries</button>
-      </div>
+    <div className="admin-layout">
+      <aside className="admin-sidebar">
+        <h2 style={{ color: "#38bdf8", marginBottom: "1.5rem", fontSize: "clamp(1rem, 3vw, 1.25rem)" }}>OFFICER PANEL</h2>
+        <button type="button" onClick={() => setActiveTab("applications")} style={styles.navBtn(activeTab === "applications")}>📂 Applications</button>
+        <button type="button" onClick={() => setActiveTab("schemes")} style={styles.navBtn(activeTab === "schemes")}>📜 Manage Schemes</button>
+        <button type="button" onClick={() => setActiveTab("inquiries")} style={styles.navBtn(activeTab === "inquiries")}>💬 User Inquiries</button>
+      </aside>
 
-      <div style={styles.content}>
-        <header style={{display: "flex", justifyContent: "space-between", marginBottom: "40px"}}>
-          <h1>Command Center</h1>
-          <div style={{background: "#334155", padding: "10px 20px", borderRadius: "30px", fontSize: "14px"}}>Admin: {localStorage.getItem("userName")}</div>
+      <div className="admin-content">
+        <header className="flex-between" style={{ marginBottom: "2rem", flexWrap: "wrap" }}>
+          <h1 style={{ fontSize: "clamp(1.25rem, 4vw, 2rem)", margin: 0 }}>Command Center</h1>
+          <div style={{ background: "#334155", padding: "0.5rem 1.25rem", borderRadius: "30px", fontSize: "14px" }}>Admin: {localStorage.getItem("userName")}</div>
         </header>
 
-        <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px"}}>
+        <div className="admin-stats">
           <div style={styles.statCard}><p>Total Requests</p><h1>{stats.total}</h1></div>
-          <div style={styles.statCard}><p>Pending</p><h1 style={{color: "#facc15"}}>{stats.pending}</h1></div>
-          <div style={styles.statCard}><p>System Health</p><h1 style={{color: "#4ade80"}}>100%</h1></div>
+          <div style={styles.statCard}><p>Pending</p><h1 style={{ color: "#facc15" }}>{stats.pending}</h1></div>
+          <div style={styles.statCard}><p>System Health</p><h1 style={{ color: "#4ade80" }}>100%</h1></div>
         </div>
 
-        <div style={{marginTop: "20px"}}>
+        <div style={{ marginTop: "1.5rem" }}>
             {activeTab === "applications" && (
-              <table style={styles.table}>
+              <div className="table-wrap">
+              <table className="responsive-table" style={styles.table}>
                 <thead>
                   <tr>
                     <th style={styles.th}>Applicant Details</th>
@@ -157,6 +155,7 @@ function AdminDashboard() {
                   )) : <tr><td colSpan="5" style={{...styles.td, textAlign: "center"}}>No applications found.</td></tr>}
                 </tbody>
               </table>
+              </div>
             )}
 
             {activeTab === "inquiries" && (
@@ -169,7 +168,8 @@ function AdminDashboard() {
                    </label>
                 </div>
 
-                <table style={styles.table}>
+                <div className="table-wrap">
+                <table className="responsive-table" style={styles.table}>
                   <thead>
                     <tr>
                       <th style={styles.th}>Sender</th>
@@ -198,6 +198,7 @@ function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             )}
 

@@ -45,6 +45,7 @@ function App() {
       <ScrollToTop />
       <Navbar />
 
+      <main className="app-main">
       <Routes>
         {/* --- PUBLIC ROUTES --- */}
         <Route path="/" element={<Home />} />
@@ -96,14 +97,15 @@ function App() {
         {/* --- SMART FACILITY: 404 CATCH-ALL --- */}
         {/* This prevents the "Blank Page" by showing a friendly error if the URL is wrong */}
         <Route path="*" element={
-          <div style={{ textAlign: 'center', padding: '100px', fontFamily: 'Poppins' }}>
-            <h1 style={{ fontSize: '100px', margin: 0, color: '#e2e8f0' }}>404</h1>
+          <div className="not-found-page">
+            <h1>404</h1>
             <h2>Page Not Found</h2>
             <p>The link you followed might be broken or the page has been moved.</p>
-            <a href="/" style={{ color: '#1e3a8a', fontWeight: 'bold' }}>Return Home</a>
+            <a href="/" className="btn btn-primary" style={{ marginTop: '1rem' }}>Return Home</a>
           </div>
         } />
       </Routes>
+      </main>
 
       {/* Show Chatbox only when logged in */}
       {userEmail && <Chatbox />}
