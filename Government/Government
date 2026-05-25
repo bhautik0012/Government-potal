@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Render Start Command workaround: if Start Command is set to "Government", this runs the app.
+set -e
+cd "$(dirname "$0")/backend"
+exec gunicorn app:app --bind "0.0.0.0:${PORT:-5000}"
