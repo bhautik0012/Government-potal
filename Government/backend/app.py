@@ -5,7 +5,9 @@ from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+# static_folder=None: CRA build uses /static/js and /static/css under static/static/
+# Flask's default /static route would 404 those files.
+app = Flask(__name__, static_folder=None)
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
@@ -234,10 +236,12 @@ with app.app_context():
 @app.route("/<path:path>")
 def serve_frontend(path):
     """Serve React build (phone/browser). API routes registered above take priority."""
-    if path and os.path.exists(os.path.join(STATIC_FOLDER, path)):
-        return send_from_directory(STATIC_FOLDER, path)
+    if path:
+        file_path = os.path.join(STATIC_FOLDER, path)
+        if os.path.isfile(file_path):
+            return send_from_directory(STATIC_FOLDER, path)
     index = os.path.join(STATIC_FOLDER, "index.html")
-    if os.path.exists(index):
+    if os.path.isfile(index):
         return send_from_directory(STATIC_FOLDER, "index.html")
     return jsonify({
         "status": "Online",
