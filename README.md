@@ -19,7 +19,9 @@ Use a **Web Service** (Python), not Static Site — backend + frontend deploy to
 | **Root Directory** | `Government` |
 | **Runtime** | Python 3 |
 | **Build Command** | `pip install -r backend/requirements.txt && cd frontend && npm ci && npm run build && mkdir -p backend/static && cp -r build/* backend/static/` |
-| **Start Command** | `cd backend && gunicorn app:app --bind 0.0.0.0:$PORT` |
+| **Start Command** | `bash start.sh` |
+
+> Do **not** put `Government` in Start Command or Build Command — that is only for **Root Directory**.
 
 `Government` folder contains **both** `backend/` and `frontend/`.
 

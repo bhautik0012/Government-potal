@@ -13,7 +13,7 @@ services:
       npm run build &&
       mkdir -p backend/static &&
       cp -r build/* backend/static/
-    startCommand: cd backend && gunicorn app:app --bind 0.0.0.0:$PORT
+    startCommand: bash start.sh
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9

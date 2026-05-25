@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { api, API_BASE, uploadsUrl } from "../config/api";
+import { api } from "../config/api";
 
 function SchemeDetails() {
   const { id } = useParams();

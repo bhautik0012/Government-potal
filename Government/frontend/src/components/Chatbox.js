@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { api, API_BASE, uploadsUrl } from "../config/api";
+import { api } from "../config/api";
 import { useNavigate } from "react-router-dom"; // Add this for navigation
 
 function Chatbox() {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { api, API_BASE, uploadsUrl } from "../config/api";
+import { api } from "../config/api";
 
 function Status() {
   const [searchQuery, setSearchQuery] = useState("");

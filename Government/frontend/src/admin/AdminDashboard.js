@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { api, API_BASE, uploadsUrl } from "../config/api";
+import { api, uploadsUrl } from "../config/api";
 import { useNavigate } from "react-router-dom";
 import ManageSchemes from "./ManageSchemes"; 
 

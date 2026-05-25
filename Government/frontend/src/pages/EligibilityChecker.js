@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { api, API_BASE, uploadsUrl } from "../config/api";
+import { api } from "../config/api";
 import { useNavigate } from "react-router-dom";
 
 function EligibilityChecker() {

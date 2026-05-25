@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { api, API_BASE, uploadsUrl } from "../config/api";
+import { api, uploadsUrl } from "../config/api";
 import QRCode from "react-qr-code";
 import { toJpeg } from 'html-to-image';
 import SignatureCanvas from 'react-signature-canvas';
@@ -33,7 +33,7 @@ function Profile() {
 
   const fetchVault = async () => {
     try {
-      const res = await api.get(`${API_BASE}/api/user/my-vault/${userEmail}`);
+      const res = await api.get(`/api/user/my-vault/${userEmail}`);
       setVaultDocs(res.data);
     } catch (err) {
       console.error("Vault Fetch Error:", err);
@@ -44,7 +44,7 @@ function Profile() {
   const handleProfileUpdate = async () => {
     try {
       // Body must include the email so Flask knows WHICH user to update
-      const response = await api.put(`${API_BASE}/api/user/update-profile`, {
+      const response = await api.put(`/api/user/update-profile`, {
         email: userEmail, 
         name: editName,
         mobile: editMobile 
@@ -77,7 +77,7 @@ function Profile() {
 
     setIsUploading(true);
     try {
-      await api.post(`${API_BASE}/api/user/upload-document`, formData);
+      await api.post(`/api/user/upload-document`, formData);
       alert("✅ Document secured!");
       fetchVault();
     } catch (err) { alert("❌ Upload failed."); } 
@@ -85,7 +85,7 @@ function Profile() {
   };
 
   const handleAiVerify = async (doc) => {
-    const imageUrl = `${API_BASE}/uploads/documents/${doc.file}`;
+    const imageUrl = uploadsUrl(doc.file);
     setIsScanning(true);
     setScanProgress(0);
     try {
@@ -93,7 +93,7 @@ function Profile() {
         logger: m => { if (m.status === 'recognizing text') setScanProgress(Math.floor(m.progress * 100)); }
       });
       if (text.toLowerCase().includes(editName.toLowerCase())) {
-        await api.put(`${API_BASE}/api/user/verify-document/${doc.id}`);
+        await api.put(`/api/user/verify-document/${doc.id}`);
         alert("✨ AI Verified!");
         fetchVault();
       } else { alert("❌ No name match found."); }
@@ -243,7 +243,7 @@ function Profile() {
                 </div>
                 <div style={{display: "flex", gap: "8px"}}>
                   {!doc.is_verified && <button onClick={() => handleAiVerify(doc)} style={{background: "#3b82f6", color: "white", border: "none", padding: "5px 10px", borderRadius: "8px", fontSize: "11px", cursor: "pointer"}}>Verify</button>}
-                  <button onClick={() => window.open(`${API_BASE}/uploads/documents/${doc.file}`, "_blank")} style={{ background: "#1e3a8a", color: "white", border: "none", padding: "5px 12px", borderRadius: "8px", fontSize: "11px", cursor: "pointer" }}>View</button>
+                  <button onClick={() => window.open(uploadsUrl(doc.file), "_blank")} style={{ background: "#1e3a8a", color: "white", border: "none", padding: "5px 12px", borderRadius: "8px", fontSize: "11px", cursor: "pointer" }}>View</button>
                 </div>
               </div>
             ))}
