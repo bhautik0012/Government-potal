@@ -9,16 +9,32 @@ Digital government services portal — **Flask** backend + **React** frontend.
 
 ## Open on your phone (no local run)
 
-Deploy from GitHub to get **one public link** (works on mobile Safari/Chrome):
+Use a **Web Service** (Python), not Static Site — backend + frontend deploy together.
 
-1. Sign in at [render.com](https://render.com) (free account).
-2. **New → Blueprint** → connect repo [Government-potal](https://github.com/bhautik0012/Government-potal).
-3. Render reads `render.yaml` and builds backend + frontend automatically.
-4. When deploy finishes, open your app URL, e.g. `https://government-potal.onrender.com` — bookmark it on your phone.
+### Render dashboard settings (copy these)
+
+| Field | Value |
+|-------|--------|
+| **Service type** | Web Service |
+| **Root Directory** | `Government` |
+| **Runtime** | Python 3 |
+| **Build Command** | `pip install -r backend/requirements.txt && cd frontend && npm ci && npm run build && mkdir -p backend/static && cp -r build/* backend/static/` |
+| **Start Command** | `cd backend && gunicorn app:app --bind 0.0.0.0:$PORT` |
+
+`Government` folder contains **both** `backend/` and `frontend/`.
+
+### Quick deploy
+
+1. [render.com](https://render.com) → **New → Web Service** (or Blueprint).
+2. Connect [Government-potal](https://github.com/bhautik0012/Government-potal).
+3. Set **Root Directory** to `Government` and commands from the table above (or use Blueprint — reads `render.yaml`).
+4. Open your live URL on your phone and bookmark it.
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/bhautik0012/Government-potal)
 
-> Free tier may sleep after ~15 min idle; first open can take ~30 seconds to wake up.
+> If you only created a **Static Site**, API/login will not work. Delete it and use **Web Service** with `Government` as root.
+
+> Free tier may sleep after idle; first open can take ~30 seconds.
 
 ## Project structure
 

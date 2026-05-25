@@ -1,19 +1,19 @@
-# Deploy from GitHub: https://github.com/bhautik0012/Government-potal
-# One public URL for phone + desktop (React + Flask API)
+# Full stack: backend (Flask) + frontend (React) — one URL for phone/browser
+# Repo: https://github.com/bhautik0012/Government-potal
 services:
   - type: web
     name: government-potal
     runtime: python
     plan: free
-    rootDir: Government/backend
+    rootDir: Government
     buildCommand: >-
-      pip install -r requirements.txt &&
-      cd ../frontend &&
+      pip install -r backend/requirements.txt &&
+      cd frontend &&
       npm ci &&
       npm run build &&
-      mkdir -p ../backend/static &&
-      cp -r build/* ../backend/static/
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+      mkdir -p backend/static &&
+      cp -r build/* backend/static/
+    startCommand: cd backend && gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
