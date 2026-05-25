@@ -111,19 +111,125 @@ def login():
 
 @app.route("/api/user/my-applications/<email>", methods=["GET"])
 def get_user_applications(email):
-    # Clean the email to prevent "ghost" mismatches
     clean_email = email.strip().lower()
     apps = Application.query.filter_by(user_email=clean_email).all()
-    
     return jsonify([{
         "id": a.id,
         "scheme": a.scheme_name,
         "applicant": a.applicant_name,
         "income": a.income,
-        "status": a.status, 
+        "status": a.status,
         "remarks": a.remarks,
         "date": a.applied_on.strftime("%Y-%m-%d")
     } for a in apps])
+
+
+@app.route("/api/user/my-vault/<email>", methods=["GET"])
+def get_user_vault(email):
+    clean_email = email.strip().lower()
+    docs = DocumentVault.query.filter_by(user_email=clean_email).all()
+    return jsonify([{
+        "id": d.id,
+        "name": d.doc_name,
+        "file": os.path.basename(d.file_path) if d.file_path else "",
+        "is_verified": bool(d.is_verified),
+    } for d in docs])
+
+
+@app.route("/api/user/update-profile", methods=["PUT"])
+def update_profile():
+    data = request.json or {}
+    user = User.query.filter_by(email=data.get("email", "").strip().lower()).first()
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    if data.get("name"):
+        user.name = data.get("name")
+    if data.get("mobile"):
+        user.mobile = data.get("mobile")
+    db.session.commit()
+    return jsonify({"message": "Profile updated"}), 200
+
+
+@app.route("/api/user/upload-document", methods=["POST"])
+def upload_vault_document():
+    email = (request.form.get("email") or "").strip().lower()
+    doc_type = request.form.get("doc_type") or "Document"
+    file = request.files.get("file")
+    if not email or not file:
+        return jsonify({"message": "Email and file required"}), 400
+    filename = secure_filename(f"vault_{email}_{doc_type}_{file.filename}")
+    path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(path)
+    db.session.add(DocumentVault(user_email=email, doc_name=doc_type, file_path=path))
+    db.session.commit()
+    return jsonify({"message": "Uploaded"}), 201
+
+
+@app.route("/api/user/verify-document/<int:doc_id>", methods=["PUT"])
+def verify_vault_document(doc_id):
+    doc = DocumentVault.query.get(doc_id)
+    if not doc:
+        return jsonify({"message": "Not found"}), 404
+    doc.is_verified = True
+    db.session.commit()
+    return jsonify({"message": "Verified"}), 200
+
+
+@app.route("/api/faqs", methods=["GET"])
+def list_faqs():
+    return jsonify([
+        {"id": 1, "question": "How to apply for a scheme?", "answer": "Go to Schemes, pick a scheme, and click Apply. Complete the form and upload documents."},
+        {"id": 2, "question": "How to check eligibility?", "answer": "Use the Eligibility page and enter your age, income, and category."},
+        {"id": 3, "question": "How to track my application?", "answer": "Open Dashboard or Status and use your registered email."},
+        {"id": 4, "question": "Are there any agent fees?", "answer": "No. This portal is free for all citizens."},
+        {"id": 5, "question": "How to upload documents?", "answer": "Open Profile → Document Vault → Add Document."},
+    ])
+
+
+@app.route("/api/announcements", methods=["GET"])
+def list_announcements():
+    return jsonify([
+        {"id": 1, "content": "GovPortal 2026 is live — apply for schemes online."},
+    ])
+
+
+@app.route("/api/admin/all-applications", methods=["GET"])
+def admin_all_applications():
+    apps = Application.query.order_by(Application.applied_on.desc()).all()
+    return jsonify([{
+        "id": a.id,
+        "email": a.user_email,
+        "name": a.scheme_name,
+        "applicant_name": a.applicant_name,
+        "status": a.status,
+        "remarks": a.remarks or "",
+        "aadhaar": a.aadhaar_path,
+        "income_proof": a.income_proof_path,
+    } for a in apps])
+
+
+@app.route("/api/admin/inquiries", methods=["GET"])
+def admin_inquiries():
+    return jsonify([])
+
+
+@app.route("/api/admin/update-status", methods=["PUT"])
+def admin_update_status():
+    data = request.json or {}
+    app_row = Application.query.get(data.get("id"))
+    if not app_row:
+        return jsonify({"message": "Not found"}), 404
+    if data.get("status"):
+        app_row.status = data.get("status")
+    if data.get("remarks") is not None:
+        app_row.remarks = data.get("remarks")
+    db.session.commit()
+    return jsonify({"message": "Updated"}), 200
+
+
+@app.route("/api/contact", methods=["POST"])
+def contact_submit():
+    return jsonify({"message": "Thank you. We will respond soon."}), 201
 
 
 # --- ADMIN: ADD SCHEME (FIXED) ---
@@ -214,8 +320,19 @@ def get_single_scheme(id):
 def seed():
     if not User.query.filter_by(role="admin").first():
         db.session.add(User(name="Admin", email="admin@gov.in", password="adminpassword", role="admin"))
-        db.session.commit()
-    return "Seeded"
+    if Scheme.query.count() == 0:
+        samples = [
+            Scheme(name="PM Kisan Nidhi", ministry="Agriculture", category="Farmers",
+                   description="Direct income support for farmers.", eligibility="Small and marginal farmers"),
+            Scheme(name="Ayushman Bharat", ministry="Health", category="Healthcare",
+                   description="Health coverage up to 5 lakh.", eligibility="Eligible families per SECC"),
+            Scheme(name="PM Awas Yojana", ministry="Housing", category="Housing",
+                   description="Affordable housing assistance.", eligibility="Economically weaker sections"),
+        ]
+        for s in samples:
+            db.session.add(s)
+    db.session.commit()
+    return jsonify({"message": "Seeded"}), 200
 
 # --- ENHANCED AUTO-DB INITIALIZER ---
 with app.app_context():

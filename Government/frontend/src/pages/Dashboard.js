@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { api } from "../config/api";
+import { asArray } from "../utils/safeData";
 import { Link } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import QRCode from "qrcode";
@@ -65,7 +66,7 @@ function Dashboard() {
     const fetchDashboardData = async () => {
       try {
         const res = await api.get(`/api/user/my-applications/${userEmail}`);
-        const allApps = res.data;
+        const allApps = asArray(res.data);
 
         setStats({
           total: allApps.length,
@@ -75,9 +76,10 @@ function Dashboard() {
         });
 
         setRecentApps(allApps.slice(-5).reverse());
-        setLoading(false);
       } catch (err) {
         console.error("Dashboard Error:", err);
+        setRecentApps([]);
+      } finally {
         setLoading(false);
       }
     };
@@ -104,9 +106,9 @@ function Dashboard() {
   };
 
   const styles = {
-    page: { fontFamily: "'Poppins', sans-serif", background: "#f1f5f9", minHeight: "100vh", display: "flex" },
-    sidebar: { width: "260px", background: "#1e3a8a", color: "white", padding: "30px 20px", display: "flex", flexDirection: "column", gap: "20px", position: "sticky", top: 0, height: "100vh" },
-    main: { flex: 1, padding: "40px" },
+    page: { fontFamily: "'Poppins', sans-serif", background: "#f1f5f9", minHeight: "100vh", display: "flex", flexWrap: "wrap" },
+    sidebar: { width: "100%", maxWidth: "260px", flex: "0 0 auto", background: "#1e3a8a", color: "white", padding: "clamp(1rem, 3vw, 1.75rem)", display: "flex", flexDirection: "column", gap: "1rem" },
+    main: { flex: "1 1 280px", minWidth: 0, padding: "clamp(1rem, 4vw, 2.5rem)", width: "100%" },
     card: (bg) => ({ background: "white", padding: "25px", borderRadius: "20px", boxShadow: "0 4px 15px rgba(0,0,0,0.05)", borderLeft: `6px solid ${bg}` }),
     statusBadge: (status) => ({
       padding: "5px 12px", borderRadius: "20px", fontSize: "11px", fontWeight: "bold", cursor: "pointer",
@@ -128,16 +130,20 @@ function Dashboard() {
 
       <div style={styles.main}>
         <h1>Welcome, {userName}!</h1>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px", margin: "30px 0" }}>
+        <div className="admin-stats" style={{ margin: "1.5rem 0" }}>
           <div style={styles.card("#3b82f6")}><h4>Total</h4><h2>{stats.total}</h2></div>
           <div style={styles.card("#10b981")}><h4>Approved</h4><h2 style={{color: "#10b981"}}>{stats.approved}</h2></div>
           <div style={styles.card("#f59e0b")}><h4>Pending</h4><h2 style={{color: "#f59e0b"}}>{stats.pending}</h2></div>
           <div style={styles.card("#ef4444")}><h4>Rejected</h4><h2 style={{color: "#ef4444"}}>{stats.rejected}</h2></div>
         </div>
 
-        <div style={{ background: "white", padding: "30px", borderRadius: "20px" }}>
+        <div className="card" style={{ padding: "clamp(1rem, 3vw, 1.75rem)" }}>
           <h3>Recent Activity</h3>
-          <table style={{ width: "100%", marginTop: "20px", borderCollapse: "collapse" }}>
+          {recentApps.length === 0 ? (
+            <p style={{ color: "#64748b", marginTop: "1rem" }}>No applications yet. <Link to="/schemes">Browse schemes</Link> to apply.</p>
+          ) : (
+          <div className="table-wrap">
+          <table className="responsive-table" style={{ width: "100%", marginTop: "20px", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ textAlign: "left", color: "#94a3b8", fontSize: "13px" }}>
                 <th style={{ padding: "10px" }}>SCHEME</th>
@@ -177,6 +183,8 @@ function Dashboard() {
               ))}
             </tbody>
           </table>
+          </div>
+          )}
         </div>
       </div>
     </div>

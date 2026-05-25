@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { api } from "../config/api";
+import { asArray } from "../utils/safeData";
 
 function Help() {
   const [faqs, setFaqs] = useState([]);
@@ -9,7 +10,7 @@ function Help() {
   useEffect(() => {
     // Fetch FAQs from your Flask Backend
     api.get("/api/faqs")
-      .then(res => setFaqs(res.data))
+      .then(res => setFaqs(asArray(res.data)))
       .catch(() => {
         // Fallback demo data if backend is offline
         setFaqs([
@@ -25,14 +26,19 @@ function Help() {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  const filteredFaqs = faqs.filter(f => f.question.toLowerCase().includes(searchTerm.toLowerCase()));
+  const safeFaqs = asArray(faqs);
+  const filteredFaqs = safeFaqs.filter(f => f?.question?.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const styles = {
     page: {
       fontFamily: "'Poppins', sans-serif",
       background: "#f8fafc",
       minHeight: "100vh",
-      padding: "60px 10%"
+      padding: "clamp(1.5rem, 5vw, 3.5rem) clamp(1rem, 5vw, 10%)",
+      width: "100%",
+      maxWidth: "900px",
+      margin: "0 auto",
+      boxSizing: "border-box",
     },
     header: { textAlign: "center", marginBottom: "50px" },
     searchBar: {
@@ -99,6 +105,9 @@ function Help() {
       </div>
 
       <div>
+        {filteredFaqs.length === 0 && (
+          <p style={{ textAlign: "center", color: "#64748b" }}>No FAQs match your search.</p>
+        )}
         {filteredFaqs.map((faq, index) => (
           <div key={faq.id} style={styles.accordionItem}>
             <div style={styles.question} onClick={() => toggleAccordion(index)}>

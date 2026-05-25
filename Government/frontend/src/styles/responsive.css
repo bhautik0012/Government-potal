@@ -319,6 +319,54 @@ textarea.field:focus {
   border: 1px solid #e2e8f0;
 }
 
+/* ----- Home popular schemes ----- */
+.popular-schemes-section {
+  background: #fff;
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 5vw, 10%);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.popular-schemes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(1rem, 3vw, 1.75rem);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.popular-scheme-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  width: 100%;
+}
+
+.popular-scheme-card h3 {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  margin: 0.5rem 0;
+}
+
+/* ----- Dashboard sidebar ----- */
+.dashboard-layout {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.dashboard-sidebar {
+  width: 100%;
+  max-width: 260px;
+  flex: 0 0 auto;
+}
+
+.dashboard-main {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
 /* ----- Home hero ----- */
 .hero {
   background: linear-gradient(-45deg, #1e3a8a, #2563eb, #0ea5e9, #3b82f6);

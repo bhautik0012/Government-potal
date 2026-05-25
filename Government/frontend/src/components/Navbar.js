@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { api } from "../config/api";
+import { asArray } from "../utils/safeData";
 
 const translations = {
   en: {
@@ -53,7 +54,8 @@ function Navbar() {
   useEffect(() => {
     api.get("/api/announcements")
       .then(res => {
-        if (res.data.length > 0) setNews(res.data[res.data.length - 1].content);
+        const list = asArray(res.data);
+        if (list.length > 0) setNews(list[list.length - 1].content);
       })
       .catch(err => console.error("News Fetch Error:", err));
 
@@ -61,7 +63,7 @@ function Navbar() {
       if (userEmail && userRole === "citizen") {
         try {
           const res = await api.get(`/api/user/my-applications/${userEmail}`);
-          const processed = res.data.filter(a => a.status !== "Pending");
+          const processed = asArray(res.data).filter(a => a.status !== "Pending");
           setNotifications(processed.reverse());
           const lastSeenCount = parseInt(localStorage.getItem("notifCount") || "0", 10);
           if (processed.length > lastSeenCount) setHasUnseen(true);

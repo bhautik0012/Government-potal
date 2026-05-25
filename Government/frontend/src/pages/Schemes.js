@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../config/api";
+import { asArray } from "../utils/safeData";
 import { Link } from "react-router-dom";
 
 function Schemes() {
@@ -14,7 +15,7 @@ function Schemes() {
     const fetchSchemes = async () => {
       try {
         const res = await api.get("/api/schemes");
-        setSchemes(res.data);
+        setSchemes(asArray(res.data));
       } catch (err) {
         console.error("Backend offline. Using local backup.");
         setSchemes([

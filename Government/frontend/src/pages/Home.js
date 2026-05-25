@@ -48,15 +48,15 @@ function Home() {
         ))}
       </div>
 
-      <section style={{ background: "#fff", paddingBottom: "2rem" }}>
+      <section className="popular-schemes-section">
         <h2 className="section-title">Most Popular Schemes</h2>
-        <div className="grid grid-3 page" style={{ paddingTop: 0 }}>
+        <div className="popular-schemes-grid">
           {[
             { tag: "HEALTHCARE", color: "#2563eb", title: "Ayushman Bharat", text: "Up to ₹5 Lakhs free treatment per year." },
             { tag: "FARMERS", color: "#059669", title: "PM Kisan Nidhi", text: "₹6,000 per year for small farmers." },
             { tag: "HOUSING", color: "#d97706", title: "PM Awas Yojana", text: "Build your home with low interest." },
           ].map((s) => (
-            <div key={s.title} className="card" style={{ borderLeft: `5px solid ${s.color}` }}>
+            <div key={s.title} className="card popular-scheme-card" style={{ borderLeft: `5px solid ${s.color}` }}>
               <span style={{ color: s.color, fontWeight: "bold", fontSize: "0.85rem" }}>{s.tag}</span>
               <h3>{s.title}</h3>
               <p style={{ color: "#64748b" }}>{s.text}</p>
@@ -74,7 +74,7 @@ function Home() {
             { img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=500&q=60", title: "Digital Literacy Campaign", text: "Protect your Aadhaar from scams." },
           ].map((u) => (
             <div key={u.title} className="card">
-              <img src={u.img} alt="" style={{ width: "100%", borderRadius: 10, marginBottom: "1rem" }} />
+              <div style={{ width: "100%", height: 140, borderRadius: 10, marginBottom: "1rem", background: "linear-gradient(135deg, #dbeafe, #eff6ff)", display: "flex", alignItems: "center", justifyContent: "center", color: "#2563eb", fontWeight: 600 }}>📰 Update</div>
               <h4>{u.title}</h4>
               <p style={{ color: "#64748b", margin: 0 }}>{u.text}</p>
             </div>

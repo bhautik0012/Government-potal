@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Chatbox from "./components/Chatbox";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Admin Imports
 import AdminLogin from "./admin/AdminLogin";
@@ -46,6 +47,7 @@ function App() {
       <Navbar />
 
       <main className="app-main">
+      <ErrorBoundary>
       <Routes>
         {/* --- PUBLIC ROUTES --- */}
         <Route path="/" element={<Home />} />
@@ -105,6 +107,7 @@ function App() {
           </div>
         } />
       </Routes>
+      </ErrorBoundary>
       </main>
 
       {/* Show Chatbox only when logged in */}

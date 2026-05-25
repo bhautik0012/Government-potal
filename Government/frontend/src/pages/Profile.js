@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { api, uploadsUrl } from "../config/api";
+import { asArray, DEFAULT_AVATAR } from "../utils/safeData";
 import QRCode from "react-qr-code";
 import { toJpeg } from 'html-to-image';
 import SignatureCanvas from 'react-signature-canvas';
@@ -34,9 +35,10 @@ function Profile() {
   const fetchVault = async () => {
     try {
       const res = await api.get(`/api/user/my-vault/${userEmail}`);
-      setVaultDocs(res.data);
+      setVaultDocs(asArray(res.data));
     } catch (err) {
       console.error("Vault Fetch Error:", err);
+      setVaultDocs([]);
     }
   };
 
@@ -132,8 +134,8 @@ function Profile() {
   };
 
   const styles = {
-    container: { padding: "40px 5%", background: "#f8fafc", minHeight: "100vh", fontFamily: "'Poppins', sans-serif" },
-    mainGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", gap: "30px" },
+    container: { padding: "clamp(1rem, 4vw, 2.5rem)", background: "#f8fafc", minHeight: "100vh", fontFamily: "'Poppins', sans-serif", width: "100%", maxWidth: "1400px", margin: "0 auto", boxSizing: "border-box" },
+    mainGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "clamp(1rem, 3vw, 1.75rem)" },
     card: { background: "white", padding: "30px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" },
     idCard: {
       background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
@@ -172,7 +174,7 @@ function Profile() {
           </div>
 
           <div style={{ position: "relative", width: "110px", height: "110px", margin: "0 auto 25px" }}>
-            <img src={profileImage || "https://via.placeholder.com/110"} alt="Profile" style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover", border: "4px solid #f1f5f9" }} />
+            <img src={profileImage || DEFAULT_AVATAR} alt="Profile" style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover", border: "4px solid #f1f5f9" }} />
             <label htmlFor="file-upload" style={{ position: "absolute", bottom: "5px", right: "5px", background: "white", padding: "7px", borderRadius: "50%", cursor: "pointer", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" }}>
               📸<input id="file-upload" type="file" style={{ display: "none" }} onChange={handleImageChange} />
             </label>
@@ -209,7 +211,7 @@ function Profile() {
               <div style={{ width: "35px", height: "22px", background: "#fbbf24", borderRadius: "4px" }}></div>
             </div>
             <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-              <img src={profileImage || "https://via.placeholder.com/65"} alt="ID" style={{ width: "65px", height: "65px", borderRadius: "12px", border: "2px solid white", objectFit: "cover", background: "white" }} />
+              <img src={profileImage || DEFAULT_AVATAR} alt="ID" style={{ width: "65px", height: "65px", borderRadius: "12px", border: "2px solid white", objectFit: "cover", background: "white" }} />
               <div>
                 <h3 style={{ margin: 0, fontSize: "19px" }}>{editName.toUpperCase()}</h3>
                 <p style={{ margin: 0, fontSize: "11px", opacity: 0.9 }}>{editMobile}</p>
@@ -235,6 +237,9 @@ function Profile() {
             </label>
           </div>
           <div style={{maxHeight: "250px", overflowY: "auto"}}>
+            {vaultDocs.length === 0 && (
+              <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "14px" }}>No documents yet. Upload your first document above.</p>
+            )}
             {vaultDocs.map((doc) => (
               <div key={doc.id} style={styles.docItem}>
                 <div>
