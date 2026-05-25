@@ -1,0 +1,79 @@
+/* --- 1. THEME VARIABLES --- */
+:root {
+  /* Light Mode Colors (Default) */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #1e3a8a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --nav-bg: #1e3a8a;
+  --accent-color: #2563eb;
+}
+
+/* Dark Mode Overrides */
+body.dark-mode {
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #38bdf8;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --nav-bg: #1e293b;
+  --accent-color: #38bdf8;
+}
+
+/* --- 2. GLOBAL STYLES --- */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ensure all your cards use the theme variable */
+.card, .info-section, .glass-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+/* --- 3. REACT DEFAULT STYLES (MODIFIED) --- */
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: var(--bg-card); /* Changed from static #282c34 */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: var(--text-main);
+}
+
+.App-link {
+  color: var(--accent-color);
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* --- 4. UTILITY CLASSES --- */
+.text-primary { color: var(--text-main); }
+.text-secondary { color: var(--text-muted); }
